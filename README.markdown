@@ -6,18 +6,18 @@ an action as specified in command line arguments. Best run as daemon
 
 Usage 
 =====
-monitDir.rb -d [directory to monitor] [options]
+    monitDir.rb -d [directory to monitor] [options]
 
-use monitDir.rb -h for more info
+  use `monitDir.rb -h` for more info
 
 Options
 =======
-* -d, --directory     Directory to monitor (required)
-* -r, --recursive     Monitor subdirectories too
-* -i, --interval      Time between polls, in seconds
-* -e, --execute       Command to execute when directory changes
-* -h, --help          Displays help message
-* -v, --version       Display the version, then exit
+    -d, --directory   Directory to monitor (required)
+    -r, --recursive   Monitor subdirectories too
+    -i, --interval    Time between polls, in seconds
+    -e, --execute     Command to execute when directory changes
+    -h, --help        Displays help message
+    -v, --version     Display the version, then exit
 
 Author
 ======
