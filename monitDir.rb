@@ -17,6 +17,7 @@
 #   -d, --directory     Directory to monitor (required)
 #   -r, --recursive     Monitor subdirectories too
 #   -i, --interval      Time between polls, in seconds
+#   -e, --execute       Command to execute when directory changes
 #   -h, --help          Displays help message
 #   -v, --version       Display the version, then exit
 #
@@ -63,10 +64,11 @@ class App
   def parsed_options?
     opts = OptionParser.new
     opts.on('-v', '--version')                { output_version; exit 0 }
-    opts.on('-h', '--help')                   { output_usage }
+    opts.on('-h', '--help')                   { output_options }
     opts.on('-r', '--recursive')              { @options.recursive = true }
     opts.on('-d', '--directory DIR', String)  { |@options.directory| }    
     opts.on('-i', '--interval', Integer)      { |@options.interval| }
+    opts.on('-e', '--execute CMD', String)    { |@options.action| }
     
     opts.parse!(@arguments) rescue return false
     return false unless !@options.directory.nil?
@@ -79,6 +81,10 @@ class App
   
   def output_usage
     RDoc::usage('usage') #derived from comments above
+  end
+  
+  def output_options
+    RDoc::usage('options')
   end
   
   def start_monitDir
