@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+#--
+#    Name    : monitDird
+#    Author  : Jerod Santo
+#    Contact : jerod.santo@gmail.com
+#    Date    : 2008 July 8
+#    About   : Run monitDir.rb as system daemon
+#--
+
+require 'rubygems'
+require 'daemons'
+
+Daemons.run( 'monitDir.rb' )
