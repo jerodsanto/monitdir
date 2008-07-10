@@ -71,7 +71,6 @@ class App
     opts.on('-e', '--execute CMD', String)    { |@options.action| }
     
     opts.parse!(@arguments) rescue return false
-    puts @options.interval
     return false unless !@options.directory.nil?
     true
   end
