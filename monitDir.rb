@@ -15,8 +15,8 @@
 #
 # == Options
 #   -d, --directory     Directory to monitor (required)
-#   -r, --recursive     Monitor subdirectories too
-#   -i, --interval      Time between polls, in seconds
+#   -r, --recursive     Monitor subdirectories too (default = off)
+#   -i, --interval      Time between polls, in seconds (default = 5)
 #   -e, --execute       Command to execute when directory changes
 #   -h, --help          Displays help message
 #   -v, --version       Display the version, then exit
@@ -67,10 +67,11 @@ class App
     opts.on('-h', '--help')                   { output_options }
     opts.on('-r', '--recursive')              { @options.recursive = true }
     opts.on('-d', '--directory DIR', String)  { |@options.directory| }    
-    opts.on('-i', '--interval', Integer)      { |@options.interval| }
+    opts.on('-i', '--interval INT', Integer)  { |@options.interval| }
     opts.on('-e', '--execute CMD', String)    { |@options.action| }
     
     opts.parse!(@arguments) rescue return false
+    puts @options.interval
     return false unless !@options.directory.nil?
     true
   end

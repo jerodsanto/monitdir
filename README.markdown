@@ -13,8 +13,8 @@ Usage
 Options
 =======
     -d, --directory   Directory to monitor (required)
-    -r, --recursive   Monitor subdirectories too
-    -i, --interval    Time between polls, in seconds
+    -r, --recursive   Monitor subdirectories too (default = off)
+    -i, --interval    Time between polls, in seconds (default = 5)
     -e, --execute     Command to execute when directory changes
     -h, --help        Displays help message
     -v, --version     Display the version, then exit
