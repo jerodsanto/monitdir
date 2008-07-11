@@ -21,7 +21,7 @@ Options
 
 Author
 ======
-[Jerod Santo][1], jerod.santo@gmail.com
+[Jerod Santo][1], email = "moc.liamg@otnas.dorej".reverse
 
 Copyright
 =========
