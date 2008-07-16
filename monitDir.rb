@@ -164,7 +164,7 @@ class MonitDir
         removed_files.each { |f| puts "file removed: #{f}" } unless removed_files.nil?
       elsif pass_filename == true
         changed_files = new_files + removed_files
-        changed_files.each { |file| system("#{action} #{file}")}
+        changed_files.each { |file| system("#{action} #{@dir}/#{file}")}
       else
         system(action)
       end
