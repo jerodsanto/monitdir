@@ -107,14 +107,14 @@ class App
 end
 
 class Snapshot
-  attr_reader :time, :file_names
+  attr_reader :time, :file_names, :size
 
   def initialize(dir,recursive = false)
     @dir = Dir.open(File.expand_path(dir))
     @time = Time.now
     @file_names = Array.new
     @size = 0
-    @dir.each { |file| @size += File.size(file) }
+    @dir.each { |file| @size += File.size(@dir.path + "/" + file) }
     if recursive
       Find.find(@dir.path) do |path|
         if FileTest.directory?(path)
@@ -137,15 +137,28 @@ class MonitDir
     @recursive = recursive
     @previous = Snapshot.new(@dir,@recursive)
     @current = @previous
+    @stable = true
   end
 
   def poll(action,pass_filename)
     @current = Snapshot.new(@dir,@recursive)
     time_diff = @current.time - @previous.time
 
+    #this is the catalyst for all activity, a change in number of files in directory
     if @current.file_names != @previous.file_names
+      @stable = false
       new_files = @current.file_names - @previous.file_names
       removed_files = @previous.file_names - @current.file_names
+      #holding pattern until filesizes quit increasing or decreasing
+      until @stable == true do
+        sleep 1
+        @previous = @current
+        @current = Snapshot.new(@dir)
+        size_diff = @current.size - @previous.size
+        if size_diff == 0
+          @stable = true
+        end
+      end
       if action == "print"
         new_files.each { |f| puts "new file: #{f}" } unless new_files.nil?
         removed_files.each { |f| puts "file removed: #{f}" } unless removed_files.nil?
@@ -156,7 +169,6 @@ class MonitDir
         system(action)
       end
     end
-
     @previous = @current
   end
 
