@@ -16,6 +16,7 @@ Options
     -r, --recursive   Monitor subdirectories too (default = off)
     -i, --interval    Time between polls, in seconds (default = 5)
     -e, --execute     Command to execute when directory changes
+    -p, --pass-file   Used in conjunction with -e, filenames are passed as argument to action
     -h, --help        Displays help message
     -v, --version     Display the version, then exit
 

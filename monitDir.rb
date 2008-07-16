@@ -18,6 +18,7 @@
 #   -r, --recursive     Monitor subdirectories too (default = off)
 #   -i, --interval      Time between polls, in seconds (default = 5)
 #   -e, --execute       Command to execute when directory changes
+#   -p, --pass-file     Used in conjunction with -e, filenames are passed as argument to action
 #   -h, --help          Displays help message
 #   -v, --version       Display the version, then exit
 #
@@ -48,6 +49,7 @@ class App
     @options.recursive = false
     @options.interval = 5
     @options.action = "print"
+    @options.pass = false
   end
 
   #Parse options, check arguments, then run the command
@@ -69,9 +71,14 @@ class App
     opts.on('-d', '--directory DIR', String)  { |@options.directory| }    
     opts.on('-i', '--interval INT', Integer)  { |@options.interval| }
     opts.on('-e', '--execute CMD', String)    { |@options.action| }
+    opts.on('-p', '--pass-file')              { @options.pass = true }
     
     opts.parse!(@arguments) rescue return false
+    # directory is required argument
     return false unless !@options.directory.nil?
+    # -p argument cannot be set if -e is not set
+    return false if @options.pass == true and @options.action == "print"
+    # if we get here, its all good in the hood
     true
   end
   
@@ -91,7 +98,7 @@ class App
     monit = MonitDir.new(@options.directory,@options.recursive)
 
     loop do
-        monit.poll(@options.action)
+        monit.poll(@options.action,@options.pass)
       sleep @options.interval
     end
   end
@@ -130,7 +137,7 @@ class MonitDir
     @current = @previous
   end
 
-  def poll(action)
+  def poll(action,pass)
     @current = Snapshot.new(@dir,@recursive)
     time_diff = @current.time - @previous.time
 
@@ -140,6 +147,9 @@ class MonitDir
       if action == "print"
         new_files.each { |f| puts "new file: #{f}" } unless new_files.nil?
         removed_files.each { |f| puts "file removed: #{f}" } unless removed_files.nil?
+      elsif pass == true
+        changed_files = new_files + removed_files
+        changed_files.each { |file| system("#{action} #{file}")}
       else
         system(action)
       end
